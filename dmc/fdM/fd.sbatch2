@@ -1,0 +1,46 @@
+#!/bin/bash
+#SBATCH -N 1
+#SBATCH -n 16
+#SBATCH --time=96:00:00
+#SBATCH --job-name=R
+#SBATCH --output=R_%j.out 
+#SBATCH --error=R_%j.err
+#SBATCH --mail-user=lilepisorus@gmail.com   # email address
+#SBATCH --mail-type=BEGIN
+#SBATCH --mail-type=END
+
+cd $SLURM_SUBMIT_DIR
+ulimit -s unlimited
+module load vcftools
+module load miniconda3
+source activate numpy
+module load bedtools2
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $15}' Andes_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $6, $7}' MexHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_AN_MH.preEgglibInput.txt
+#cat <(tail -1 ML_AN_MH.preEgglibInput.txt) <(sed '$d' ML_AN_MH.preEgglibInput.txt) > ML_AN_MH.EgglibInput.txt
+#python ABBABABAwindows.py -g ML_AN_MH.preEgglibInput.txt -f diplo -o ML_AN_MH.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_AN_MH.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $15}' Andes_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5}' GuaHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_AN_GH.preEgglibInput.txt
+#cat <(tail -1 ML_AN_GH.preEgglibInput.txt) <(sed '$d' ML_AN_GH.preEgglibInput.txt) > ML_AN_GH.EgglibInput.txt
+#python ABBABABAwindows.py -g ML_AN_GH.preEgglibInput.txt -f diplo -o ML_AN_GH.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_AN_GH.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $15}' Andes_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8}' SW_US_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_AN_US.preEgglibInput.txt
+#cat <(tail -1 ML_AN_US.preEgglibInput.txt) <(sed '$d' ML_AN_US.preEgglibInput.txt) > ML_AN_US.EgglibInput.txt
+#python ABBABABAwindows.py -g ML_AN_US.preEgglibInput.txt -f diplo -o ML_AN_US.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_AN_US.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+#bedtools intersect -wa -wb -a <(sed '1d' ML_AN_MH.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../MH.AN.modelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_AN_MH.fd.modelSummary.txt
+#bedtools intersect -wa -wb -a <(sed '1d' ML_AN_GH.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../GH.AN.modelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_AN_GH.fd.modelSummary.txt
+#bedtools intersect -wa -wb -a <(sed '1d' ML_AN_US.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../US.AN.modelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_AN_US.fd.modelSummary.txt
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8, $9, $10, $13}' GuaHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $6, $7}' MexHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_GH_MH.preEgglibInput.txt
+#python ABBABABAwindows.py -g ML_GH_MH.preEgglibInput.txt -f diplo -o ML_GH_MH.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_GH_MH.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8, $9, $10, $13}' GuaHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8}' SW_US_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_GH_US.preEgglibInput.txt
+#python ABBABABAwindows.py -g ML_GH_US.preEgglibInput.txt -f diplo -o ML_GH_US.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_GH_US.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+#join -1 1 -2 1 <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $6, $7, $9, $10, $11, $12, $13, $16}' MexHigh_MexLow_mexicana.egglibInput.txt | sort -k1,1) <(awk -v OFS="\t" '{print $1"_"$2, $3, $4, $5, $6, $7, $8}' SW_US_MexLow_mexicana.egglibInput.txt | sort -k1,1) | sed -e 's/ /\t/g' -e 's/\_/\t/g' | sort -n -k1,1 -n -k2,2 > ML_MH_US.preEgglibInput.txt
+#python ABBABABAwindows.py -g ML_MH_US.preEgglibInput.txt -f diplo -o ML_MH_US.egglibOutput.txt -w 10000 -m 1 -s 10000 -T 16 --minData 0.5 --writeFailedWindows --popsFile ML_MH_US.txt -P1 P1 -P2 P2 -P3 P3 -O O 
+
+bedtools intersect -wa -wb -a <(sed '1d' ML_GH_MH.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../MH.GH.ModelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_GH_MH.fd.modelSummary.txt
+#bedtools intersect -wa -wb -a <(sed '1d' ML_GH_US.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../GH.US.modelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_GH_US.fd.modelSummary.txt
+#bedtools intersect -wa -wb -a <(sed '1d' ML_MH_US.egglibOutput.txt | sed -e's/\,/\t/g') -b <(sed '1d' ../MH.US.modelSummary.txt | awk -v OFS="\t" '{print $1, $2, $2, $22}' | sort -n -k1,1 -n -k2,2) > ML_MH_US.fd.modelSummary.txt
